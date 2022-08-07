@@ -7,7 +7,7 @@ int main(){
 
 	lm::Vector4f v = { 1,2,3,4 };
 
-	auto v1 = v + v;
+	auto v1 = v * v;
 
 	std::cout << v1 << std::endl;
 

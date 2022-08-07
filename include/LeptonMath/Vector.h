@@ -83,7 +83,7 @@ namespace lm{
 
 	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
-		T out
+		T out = T();
 
 		for (size_t i = 0; i < size; ++i) {
 			out += v1.data[i] * v2.data[i];
