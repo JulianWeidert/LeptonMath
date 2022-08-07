@@ -1,9 +1,15 @@
 
 #include <iostream>
 
+#include <LeptonMath/Vector.h>
+
 int main(){
 
-	std::cout << "Hello World" << std::endl;
+	lm::Vector4f v = { 1,2,3,4 };
+
+	auto v1 = v + v;
+
+	std::cout << v1 << std::endl;
 
 	return 0;
 }
