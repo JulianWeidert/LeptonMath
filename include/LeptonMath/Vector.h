@@ -40,6 +40,9 @@ namespace lm{
 
 		// Operators
 
+		T& operator[](size_t index);
+
+
 		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size> vec);
 
 		friend Vector<T, size> operator+ <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
@@ -62,12 +65,21 @@ namespace lm{
 
 	// Definitions
 
+	// Constructors
+
 	template<typename T, size_t size> requires std::is_arithmetic_v<T>
 	Vector<T, size>::Vector(std::initializer_list<T> init) {
 		assert(init.size() <= size);
-		std::copy(init.begin(), init.end(), data.begin());
+		std::copy(init.begin(), init.end(), std::begin(data));
 	}
 
+	// Operators
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	T& Vector<T, size>::operator[](size_t index) {
+		assert(index < size && index >= 0);
+		return data[index];
+	}
 
 	template<typename T, size_t size>
 	Vector<T, size> operator+(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
@@ -79,7 +91,6 @@ namespace lm{
 
 		return out;
 	}
-
 
 	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
