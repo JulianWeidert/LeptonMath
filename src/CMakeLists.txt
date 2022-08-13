@@ -2,6 +2,7 @@ set(INCLUDE_DIR "${LeptonMath_SOURCE_DIR}/include/LeptonMath")
 
 set(SRC 
 	"${INCLUDE_DIR}/Vector.h"
+	"${INCLUDE_DIR}/Matrix.h"
 	"Vector.cpp"
 )
 

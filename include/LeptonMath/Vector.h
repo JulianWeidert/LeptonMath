@@ -1,7 +1,7 @@
+#pragma once
 
 #include <ostream>
 
-#include <array>
 #include <initializer_list>
 #include <concepts>
 
@@ -15,7 +15,7 @@ namespace lm {
 	class Vector;
 
 	template<typename T, size_t size>
-	std::ostream& operator<<(std::ostream& s, const Vector<T, size> vec);
+	std::ostream& operator<<(std::ostream& s, const Vector<T, size>& vec);
 
 	template<typename T, size_t size>
 	Vector<T, size> operator+(const Vector<T, size>& v1, const  Vector<T, size>& v2);
@@ -37,7 +37,7 @@ namespace lm {
 	template<typename T, size_t size> requires std::is_arithmetic_v<T>
 	class Vector {
 	private:
-		std::array<T, size> data;
+		T data[size];
 
 	public:
 		
@@ -83,13 +83,12 @@ namespace lm {
 	using Vector3f = Vector<float, 3>;
 	using Vector4f = Vector<float, 4>;
 
-	// Definitions
 
 	// Constructors
 
 	template<typename T, size_t size> requires std::is_arithmetic_v<T>
 	Vector<T, size>::Vector(std::initializer_list<T> init) {
-		assert(init.size() <= size);
+		assert(init.size() == size);
 		std::copy(init.begin(), init.end(), std::begin(data));
 	}
 
@@ -102,7 +101,7 @@ namespace lm {
 	}
 
 	template<typename T, size_t size>
-	std::ostream& operator<<(std::ostream& s, const Vector<T, size> vec) {
+	std::ostream& operator<<(std::ostream& s, const Vector<T, size>& vec) {
 		s << "[";
 		if (size > 0) s << vec.data[0];
 		for (size_t i = 1; i < size; ++i) {

@@ -1,16 +1,17 @@
 
 #include <iostream>
+#include <span>
+#include <algorithm>
 
 #include <LeptonMath/Vector.h>
+#include <LeptonMath/Matrix.h>
 
 int main(){
 
-	lm::Vector4f v = { 1,2,3,4 };
 
-	auto v1 = -v;
-	auto v2 = v * v1;
+	lm::Matrix3x3f mat = { {1,2,3},{4,5,6},{7,8,9} };
 
-	std::cout << v2 * v1 << std::endl;
+	std::cout << mat[1][1] << std::endl;
 
 
 	return 0;
