@@ -45,9 +45,20 @@ namespace lm{
 
 		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size> vec);
 
+		// add
 		friend Vector<T, size> operator+ <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
+		// sub
+		friend Vector<T, size> operator- <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
+
+		// neg
+		friend Vector<T, size> operator- <>(const Vector<T, size>& v);
+
+		// dot
 		friend T operator* <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
+
+		// scale
+		friend Vector<T, size> operator* <>(const T& s, const  Vector<T, size>& v);
 
 	};
 
@@ -82,8 +93,20 @@ namespace lm{
 	}
 
 	template<typename T, size_t size>
+	std::ostream& operator<<(std::ostream& s, const Vector<T, size> vec) {
+		s << "[";
+		if (size > 0) s << vec.data[0];
+		for (size_t i = 1; i < size; ++i) {
+			s << "," << vec.data[i];
+		}
+		s << "]";
+		return s;
+	}
+
+	// add
+	template<typename T, size_t size>
 	Vector<T, size> operator+(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
-		Vector<T, size> out;
+		Vector<T, size> out{};
 
 		for (size_t i = 0; i < size; ++i) {
 			out.data[i] = v1.data[i] + v2.data[i];
@@ -92,6 +115,31 @@ namespace lm{
 		return out;
 	}
 
+	// sub
+	template<typename T, size_t size>
+	Vector<T, size> operator- <>(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
+		Vector<T, size> out{};
+
+		for (size_t i = 0; i < size; ++i) {
+			out.data[i] = v1.data[i] - v2.data[i];
+		}
+
+		return out;
+	}
+
+	// neg
+	template<typename T, size_t size>
+	Vector<T, size> operator- <>(const Vector<T, size>& v) {
+		Vector<T, size> out{};
+
+		for (size_t i = 0; i < size; ++i) {
+			out.data[i] = -v.data[i];
+		}
+
+		return out;
+	}
+
+	// dot
 	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
 		T out = T();
@@ -103,15 +151,17 @@ namespace lm{
 		return out;
 	}
 
+	// scale
 	template<typename T, size_t size>
-	std::ostream& operator<<(std::ostream& s, const Vector<T, size> vec) {
-		s << "[";
-		if (size > 0) s << vec.data[0];
-		for (size_t i = 1; i < size; ++i) {
-			s << "," << vec.data[i];
+	Vector<T, size>  operator* <>(const T& s, const  Vector<T, size>& v) {
+		Vector<T, size> out{};
+
+		for (size_t i = 0; i < size; ++i) {
+			out.data[i] = s * v.data[i];
 		}
-		s << "]";
-		return s;
+
+		return out;
 	}
+
 
 }

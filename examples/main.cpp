@@ -7,13 +7,11 @@ int main(){
 
 	lm::Vector4f v = { 1,2,3,4 };
 
-	auto v1 = v + v;
+	auto v1 = -v;
+	auto v2 = v * v1;
 
-	std::cout << v1 << std::endl;
+	std::cout << v2 * v1 << std::endl;
 
-	v1[5] = 69.0f;
-
-	std::cout << v1 << std::endl;
 
 	return 0;
 }
