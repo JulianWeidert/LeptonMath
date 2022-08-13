@@ -7,7 +7,7 @@
 
 #include <cassert>
 
-namespace lm{
+namespace lm {
 
 	// forward declations
 
@@ -21,7 +21,16 @@ namespace lm{
 	Vector<T, size> operator+(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
 	template<typename T, size_t size>
+	Vector<T, size> operator-(const Vector<T, size>& v1, const  Vector<T, size>& v2);
+
+	template<typename T, size_t size>
+	Vector<T, size> operator-(const  Vector<T, size>& v);
+
+	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2);
+
+	template<typename T, size_t size>
+	Vector<T, size> operator*(const T& s, const  Vector<T, size>& v);
 
 	// Vector class
 
