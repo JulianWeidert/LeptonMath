@@ -6,14 +6,28 @@
 #include <initializer_list>
 #include <concepts>
 
+#include "Vector.h"
 
 namespace lm {
+
+	// Forward declarations that are not related to Matrix
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	class Vector;
+
+	// Forwaed declarations for Matrix
 
 	template<typename T, size_t rows, size_t cols> requires std::is_arithmetic_v<T>
 	class Matrix;
 
 	template<typename T, size_t rows, size_t cols>
 	std::ostream& operator<<(std::ostream& s, const Matrix<T, rows, cols>& mat);
+
+
+	// Matrix Vector multipication
+	template<typename T, size_t rows, size_t cols>
+	Vector<T, rows> operator* (Matrix<T, rows, cols>& m,  Vector<T, cols>& v);
+
 
 	template<typename T, size_t rows, size_t cols> requires std::is_arithmetic_v<T>
 	class Matrix {
@@ -33,6 +47,10 @@ namespace lm {
 
 		friend std::ostream& operator<< <>(std::ostream& s, const Matrix<T, rows, cols>& mat);
 
+
+		// Matrix Vector multipication
+		template<typename T, size_t rows, size_t cols>
+		friend Vector<T, rows> operator* <>(Matrix<T, rows, cols>& m, Vector<T, cols>& v);
 
 	};
 
@@ -64,6 +82,7 @@ namespace lm {
 		return std::span<T, cols>(this->data + index * cols, cols);
 	}
 
+
 	template<typename T, size_t rows, size_t cols>
 	std::ostream& operator<<(std::ostream& s, const Matrix<T, rows, cols>& mat) {
 		
@@ -80,5 +99,20 @@ namespace lm {
 		return s;
 	}
 
+	// Matrix Vector multipication
+
+	template<typename T, size_t rows, size_t cols>
+	Vector<T, rows> operator* <>(Matrix<T, rows, cols>& m, Vector<T, cols>& v) {
+		Vector<T, rows> out{};
+
+		for (size_t row = 0; row < rows; ++row) {
+			T res{};
+			const auto& r = m[row];
+			for (size_t col = 0; col < cols; ++col) res += r[col] * v.data[col];
+			out[row] = res;
+		}
+
+		return out;
+	}
 
 }

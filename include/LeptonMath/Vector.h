@@ -9,7 +9,12 @@
 
 namespace lm {
 
-	// forward declations
+	// Forward declations that are not related to Vector
+
+	template<typename T, size_t rows, size_t cols> requires std::is_arithmetic_v<T>
+	class Matrix;
+
+	// Forward declations for Vector
 
 	template<typename T, size_t size> requires std::is_arithmetic_v<T>
 	class Vector;
@@ -32,6 +37,7 @@ namespace lm {
 	template<typename T, size_t size>
 	Vector<T, size> operator*(const T& s, const  Vector<T, size>& v);
 
+
 	// Vector class
 
 	template<typename T, size_t size> requires std::is_arithmetic_v<T>
@@ -52,7 +58,7 @@ namespace lm {
 		T& operator[](size_t index);
 
 
-		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size> vec);
+		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size>& vec);
 
 		// add
 		friend Vector<T, size> operator+ <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
@@ -68,6 +74,10 @@ namespace lm {
 
 		// scale
 		friend Vector<T, size> operator* <>(const T& s, const  Vector<T, size>& v);
+
+		// Matrix Vector Multipication
+		template<typename T, size_t rows, size_t cols> 
+		friend Vector<T, rows> operator* <>( Matrix<T, rows, cols>& m,  Vector<T, cols>& v);
 
 	};
 
