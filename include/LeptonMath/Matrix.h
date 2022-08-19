@@ -23,6 +23,8 @@ namespace lm {
 	template<typename T, size_t rows, size_t cols>
 	std::ostream& operator<<(std::ostream& s, const Matrix<T, rows, cols>& mat);
 
+	template<typename T, size_t m, size_t n, size_t k>
+	Matrix<T, m, k> operator*( Matrix<T, m, n>& left,  Matrix<T, n, k>& right);
 
 	// Matrix Vector multipication
 	template<typename T, size_t rows, size_t cols>
@@ -47,6 +49,8 @@ namespace lm {
 
 		friend std::ostream& operator<< <>(std::ostream& s, const Matrix<T, rows, cols>& mat);
 
+		template<typename T, size_t m, size_t n, size_t k>
+		friend Matrix<T, m, k> operator*( Matrix<T, m, n>& left,  Matrix<T, n, k>& right);
 
 		// Matrix Vector multipication
 		template<typename T, size_t rows, size_t cols>
@@ -99,6 +103,40 @@ namespace lm {
 		return s;
 	}
 
+	/*template<typename T, size_t m, size_t n, size_t k>
+	Matrix<T, m, k> operator*( Matrix<T, m, n>& left,  Matrix<T, n, k>& right) {
+		Matrix<T, m, k> out{};
+
+		for (size_t row = 0; row < m; ++row) {
+			const auto& r = left[row];
+			for (size_t col = 0; col < k; ++col) {
+				T res{};
+
+				for (size_t i = 0; i < n; ++i) res += r[i] * right[i][col];
+
+				out[row][col] = res;
+			}
+		}
+
+		return out;
+	}*/
+
+	template<typename T, size_t m, size_t n, size_t k>
+	Matrix<T, m, k> operator*(Matrix<T, m, n>& left, Matrix<T, n, k>& right) {
+		Matrix<T, m, k> out{};
+
+		for (size_t row = 0; row < m; ++row) {
+			const auto& r1 = left[row];
+			for (size_t i = 0; i < k; ++i) {
+				const auto& r2 = right[i];
+				const auto val = r1[i];
+				for (size_t col = 0; col < n; ++col) out[row][col] += val * r2[col];
+			}
+		}
+
+		return out;
+	}
+
 	// Matrix Vector multipication
 
 	template<typename T, size_t rows, size_t cols>
@@ -106,10 +144,8 @@ namespace lm {
 		Vector<T, rows> out{};
 
 		for (size_t row = 0; row < rows; ++row) {
-			T res{};
 			const auto& r = m[row];
-			for (size_t col = 0; col < cols; ++col) res += r[col] * v.data[col];
-			out[row] = res;
+			for (size_t col = 0; col < cols; ++col) out[row] += r[col] * v.data[col];
 		}
 
 		return out;
