@@ -37,6 +37,10 @@ namespace lm {
 	template<typename T, size_t size>
 	Vector<T, size> operator*(const T& s, const  Vector<T, size>& v);
 
+	// Matrix Vector multipication
+	template<typename T, size_t rows, size_t cols>
+	Vector<T, rows> operator* (Matrix<T, rows, cols>& m, Vector<T, cols>& v);
+
 
 	// Vector class
 
