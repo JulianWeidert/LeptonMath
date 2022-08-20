@@ -7,17 +7,13 @@
 #include <LeptonMath/Matrix.h>
 
 
-
 int main(){
 
 
-	lm::Matrix3x3f mat = { {1,2,3},{4,5,6},{7,8,9} };
-	lm::Vector3f vec = { 1,2,3 };
+	const lm::Vector4f vec = { 1,2,3,4 };
+	
 
-	mat.transpose();
-	//auto res1 = res * vec;
-
-	std::cout << mat << std::endl;
+	std::cout << vec.getXY() << std::endl;
 
 
 	return 0;

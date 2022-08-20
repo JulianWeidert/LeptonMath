@@ -7,6 +7,8 @@ set (CMAKE_CXX_STANDARD 20)
 
 project ("LeptonMath" C CXX)
 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "/MD /Zi /O2 /Ob2 /DNDEBUG")
+
 # Include sub-projects.
 add_subdirectory("extern")
 add_subdirectory("src")
