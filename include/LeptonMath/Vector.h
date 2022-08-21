@@ -37,6 +37,9 @@ namespace lm {
 	template<typename T, size_t size>
 	Vector<T, size> operator*(const T& s, const  Vector<T, size>& v);
 
+	template<typename T, size_t size>
+	Vector<T, size> cross(const  Vector<T, size>& a, const  Vector<T, size>& b);
+
 	// Matrix Vector multipication
 	template<typename T, size_t rows, size_t cols>
 	Vector<T, rows> operator* (Matrix<T, rows, cols>& m, Vector<T, cols>& v);
@@ -56,6 +59,11 @@ namespace lm {
 		Vector() = default;
 		Vector(std::initializer_list<T> init);
 
+		explicit Vector(const Vector<T, size - 1>& vec,const T& val) requires (size > 0);
+		explicit Vector(const T& val, const Vector<T, size - 1>& vec) requires (size > 0);
+
+		explicit Vector(const Vector<T, size - 2>& vec, const T& val1, const T& val2) requires (size > 1);
+		explicit Vector(const T& val1, const T& val2, const Vector<T, size - 2>& vec) requires (size > 1);
 
 		// Operators
 
@@ -70,6 +78,8 @@ namespace lm {
 		Vector<T, 2> getXY() const requires (size > 1);
 		Vector<T, 3> getXYZ() const requires (size > 2);
 		Vector<T, 4> getXYZW() const requires (size > 3);
+
+
 
 		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size>& vec);
 
@@ -87,6 +97,9 @@ namespace lm {
 
 		// scale
 		friend Vector<T, size> operator* <>(const T& s, const  Vector<T, size>& v);
+
+		template<typename T, size_t size>
+		friend Vector<T, size> cross<>(const  Vector<T, size>& a, const  Vector<T, size>& b) requires (size == 3);
 
 		// Matrix Vector Multipication
 		template<typename T, size_t rows, size_t cols> 
@@ -113,6 +126,32 @@ namespace lm {
 	Vector<T, size>::Vector(std::initializer_list<T> init) {
 		assert(init.size() == size);
 		std::copy(init.begin(), init.end(), std::begin(data));
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	Vector<T, size>::Vector(const Vector<T, size - 1>& vec, const T& val) requires (size > 0) {
+		for (int i = 0; i < size - 1; ++i) this->data[i] = vec[i];
+		this->data[size - 1] = val;
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	Vector<T, size>::Vector(const T& val, const Vector<T, size - 1>& vec) requires (size > 0) {
+		this->data[0] = val;
+		for (int i = 1; i < size; ++i) this->data[i] = vec[i - 1];
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	Vector<T, size>::Vector(const Vector<T, size - 2>& vec, const T& val1, const T& val2) requires (size > 1) {
+		for (int i = 0; i < size - 2; ++i) this->data[i] = vec[i];
+		this->data[size - 2] = val1;
+		this->data[size - 1] = val2;
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	Vector<T, size>::Vector(const T& val1, const T& val2, const Vector<T, size - 2>& vec) requires (size > 1) {
+		this->data[0] = val1;
+		this->data[1] = val2;
+		for (int i = 2; i < size; ++i) this->data[i] = vec[i - 2];
 	}
 
 	// Access operations
@@ -206,7 +245,7 @@ namespace lm {
 
 	// sub
 	template<typename T, size_t size>
-	Vector<T, size> operator- <>(const Vector<T, size>& v1, const  Vector<T, size>& v2) {
+	Vector<T, size> operator- (const Vector<T, size>& v1, const  Vector<T, size>& v2) {
 		Vector<T, size> out{};
 
 		for (size_t i = 0; i < size; ++i) {
@@ -218,7 +257,7 @@ namespace lm {
 
 	// neg
 	template<typename T, size_t size>
-	Vector<T, size> operator- <>(const Vector<T, size>& v) {
+	Vector<T, size> operator- (const Vector<T, size>& v) {
 		Vector<T, size> out{};
 
 		for (size_t i = 0; i < size; ++i) {
@@ -242,7 +281,7 @@ namespace lm {
 
 	// scale
 	template<typename T, size_t size>
-	Vector<T, size>  operator* <>(const T& s, const  Vector<T, size>& v) {
+	Vector<T, size>  operator* (const T& s, const  Vector<T, size>& v) {
 		Vector<T, size> out{};
 
 		for (size_t i = 0; i < size; ++i) {
@@ -252,5 +291,15 @@ namespace lm {
 		return out;
 	}
 
+	template<typename T, size_t size> 
+	Vector<T, size> cross(const  Vector<T, size>& a, const  Vector<T, size>& b) requires (size == 3)  {
+		Vector<T, size> out{};
+
+		out.data[0] = a.data[1] * b.data[2] - a.data[2] * b.data[1];
+		out.data[1] = a.data[2] * b.data[0] - a.data[0] * b.data[2];
+		out.data[2] = a.data[0] * b.data[1] - a.data[1] * b.data[0];
+
+		return out;
+	}
 
 }
