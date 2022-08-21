@@ -4,6 +4,7 @@
 
 #include <initializer_list>
 #include <concepts>
+#include <cmath>
 
 #include <cassert>
 
@@ -34,8 +35,8 @@ namespace lm {
 	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
-	template<typename T, size_t size>
-	Vector<T, size> operator*(const T& s, const  Vector<T, size>& v);
+	template<typename TScalar, typename TVec, size_t size>
+	Vector<TVec, size> operator*(const TScalar& s, const  Vector<TVec, size>& v);
 
 	template<typename T, size_t size>
 	Vector<T, size> cross(const  Vector<T, size>& a, const  Vector<T, size>& b);
@@ -79,7 +80,11 @@ namespace lm {
 		Vector<T, 3> getXYZ() const requires (size > 2);
 		Vector<T, 4> getXYZW() const requires (size > 3);
 
+		T getLength() const;
 
+		Vector<T, size> getNormalized() const;
+		void normalize();
+		
 
 		friend std::ostream& operator<< <>(std::ostream& s, const Vector<T, size>& vec);
 
@@ -96,7 +101,8 @@ namespace lm {
 		friend T operator* <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
 		// scale
-		friend Vector<T, size> operator* <>(const T& s, const  Vector<T, size>& v);
+		template<typename TScalar, typename TVec, size_t size>
+		friend Vector<TVec, size> operator* <>(const TScalar& s, const  Vector<TVec, size>& v);
 
 		template<typename T, size_t size>
 		friend Vector<T, size> cross<>(const  Vector<T, size>& a, const  Vector<T, size>& b) requires (size == 3);
@@ -217,6 +223,28 @@ namespace lm {
 		return out;
 	}
 
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	T Vector<T, size>::getLength() const {
+		T sum{};
+		for (size_t i = 0; i < size; ++i) sum += this->data[i] * this->data[i];
+		return static_cast<T>(std::sqrt(sum));
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	Vector<T, size> Vector<T, size>::getNormalized() const {
+		Vector<T, size> out{};
+
+		double invLen = 1.0 / this->getLength();
+		for (size_t i = 0; i < size; ++i) out.data[i] = this->data[i] * invLen;
+
+		return out;
+	}
+
+	template<typename T, size_t size> requires std::is_arithmetic_v<T>
+	void Vector<T, size>::normalize() {
+		double invLen = 1.0/this->getLength();
+		for (size_t i = 0; i < size; ++i) this->data[i] *= invLen;
+	}
 
 	// Other operations
 
@@ -280,12 +308,12 @@ namespace lm {
 	}
 
 	// scale
-	template<typename T, size_t size>
-	Vector<T, size>  operator* (const T& s, const  Vector<T, size>& v) {
-		Vector<T, size> out{};
+	template<typename TScalar, typename TVec, size_t size>
+	Vector<TVec, size>  operator* (const TScalar& s, const  Vector<TVec, size>& v) {
+		Vector<TVec, size> out{};
 
 		for (size_t i = 0; i < size; ++i) {
-			out.data[i] = s * v.data[i];
+			out.data[i] = static_cast<const TVec>(s) * v.data[i];
 		}
 
 		return out;
