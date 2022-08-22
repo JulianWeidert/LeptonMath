@@ -19,14 +19,10 @@ class A {
 int main(){
 
 
+	lm::Matrix4x4f mat;
 	vec4 v1 = { 2, 4, 1, 7 };
-	vec3 v2 = { 1, 5, 2 };
 
 
-	auto res = lm::Vector<int, 3>({ 0,0,3 });
-
-
-	std::cout << res.getNormalized() << std::endl;
 
 	return 0;
 }

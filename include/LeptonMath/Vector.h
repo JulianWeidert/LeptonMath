@@ -35,7 +35,7 @@ namespace lm {
 	template<typename T, size_t size>
 	T operator*(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
-	template<typename TScalar, typename TVec, size_t size>
+	template<typename TScalar, typename TVec, size_t size> requires std::is_arithmetic_v<TScalar>
 	Vector<TVec, size> operator*(const TScalar& s, const  Vector<TVec, size>& v);
 
 	template<typename T, size_t size>
@@ -101,7 +101,7 @@ namespace lm {
 		friend T operator* <>(const Vector<T, size>& v1, const  Vector<T, size>& v2);
 
 		// scale
-		template<typename TScalar, typename TVec, size_t size>
+		template<typename TScalar, typename TVec, size_t size> requires std::is_arithmetic_v<TScalar>
 		friend Vector<TVec, size> operator* <>(const TScalar& s, const  Vector<TVec, size>& v);
 
 		template<typename T, size_t size>
@@ -308,7 +308,7 @@ namespace lm {
 	}
 
 	// scale
-	template<typename TScalar, typename TVec, size_t size>
+	template<typename TScalar, typename TVec, size_t size> requires std::is_arithmetic_v<TScalar>
 	Vector<TVec, size>  operator* (const TScalar& s, const  Vector<TVec, size>& v) {
 		Vector<TVec, size> out{};
 
