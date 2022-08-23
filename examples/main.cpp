@@ -22,6 +22,7 @@ int main(){
 	lm::Matrix4x4f mat;
 	vec4 v1 = { 2, 4, 1, 7 };
 
+	auto res = 2 * (mat * v1);
 
 
 	return 0;

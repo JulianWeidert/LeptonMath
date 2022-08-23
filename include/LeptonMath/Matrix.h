@@ -26,7 +26,8 @@ namespace lm {
 	template<typename T, size_t m, size_t n, size_t k>
 	Matrix<T, m, k> operator*(const Matrix<T, m, n>& left, const  Matrix<T, n, k>& right);
 
-
+	template<typename T, size_t rows, size_t cols>
+	Vector<T, rows> operator*(Matrix<T, rows, cols>& m, Vector<T, cols>& v);
 
 	// Matrix Row
 
